@@ -16,7 +16,11 @@ global {
 	file timeFile <- csv_file("../includes/temperature_banyuls/date2012.csv", " ",string);
 	list<float> TempData;
 	list<string> timeData;
-	float toDay ;//<- (date('2012-03-09') to date('2012-08-30')) every (#day); // builds an interval between these two dates which contains all the daly dates starting from the beginning of the interval;int step <- 1 #day; // convertion time step
+	//definition of the date of begining of the simulation
+	date starting_date <- date([2012,3]);
+	//be careful, when real dates are used, modelers should not use the #month and #year values that are not consistent with them
+	float step <- 1 #day; 
+	float toDay ;//<- (date('2012-03-09') to date('2012-08-30')) every (#day); 
 	geometry shape <- envelope(parcelles_viti);
 	int beginPlantDev <- 100;
 	bool climatChange <- false;
@@ -35,7 +39,7 @@ global {
 	
 	float coeff_dist <- shape.width/250;
 	float bufferTrapping <- 10.0 * coeff_dist;
-	float aggregation_factor <- 20.0 *coeff_dist;
+	//float aggregation_factor <- 20.0 *coeff_dist;
 	float setupDistTrap <- 10.0 * coeff_dist;
 	float radius_trap <- 10.0 * coeff_dist;
 	float distEffectiveTrap <- 15.0 * coeff_dist;
@@ -75,7 +79,7 @@ global {
 		}
 		TempData <- tempFile.contents collect (float(each));
 		timeData <- timeFile.contents collect (string(each));
-		step <- (date('2012-03-09') to date('2012-08-30')) every (#day);
+		//step <- (date('2012-03-09') to date('2012-08-30')) every (#day);
 		nbcomptage <- 0;
   		fisrtComptage <- 0;
   		fisrtticks <- 0;
@@ -97,7 +101,9 @@ global {
        	}
        	do update_stat;
 	}
-	
+	//=====================================================================================
+	// we left the init part
+	//=====================================================================================
 	reflex dynamique {
 		do temperatureEvolution;
   		
@@ -263,6 +269,7 @@ global {
   			temperature_here <- temperature_here + deltaDay + (climatChange ? 0.5 : 0.0);
   		}
     	toDay <- first(TempData);
+    	write current_date;
 		TempData >> toDay;
 	}
 }
@@ -367,7 +374,6 @@ species lobesia skills: [moving] frequency: 0{
     float b <- 0.183374;
     float c <- 0.187975;
     int generation <- 0;
-    int aggre_nb <- 1;
     float unitaDev;
     float t;
     bool reproductionFlag;
@@ -481,7 +487,6 @@ species lobesia skills: [moving] frequency: 0{
 							c <- 0.197009;
 							t <- myself.temperature_here;
         					unitaDev <- 0.0;
-        				 	aggre_nb <- 1;
         				 	location <- any_location_in(myself);
     	 				}
     	 			}
@@ -568,6 +573,18 @@ experiment main type: gui {
 				data "nb of femelle" color: #violet value: lobesia count (each.sex = 1);
 			}
 			
+		}
+		display obs {
+			chart "Temperature" type: series size: {0.5,0.5}{
+				//data "nb of lobesias" color: #gray value: cell mean (each.temperature_here);
+			}
+			chart "phase evolution" type: histogram size: {0.5,0.5} position: {0.5,0.0}{
+				data "nb of eggs" color: #red value: lobesia count (each.phaseNumber = 1);
+				data "nb of larva" color: #orange value: lobesia count (each.phaseNumber = 2);
+				data "nb of crisalide" color: #brown value: lobesia count (each.phaseNumber = 3);
+				data "nb of adults" color: #yellow value: lobesia count (each.phaseNumber = 4);
+			}
+		
 		}
 	}
 }
