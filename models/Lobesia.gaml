@@ -6,12 +6,13 @@
 * Tags: Tag1, Tag2, TagN
 */
 
-model LobesiaModel
+model LobesiaModel 
 
 global {
-	file temperature_raster <- file("../includes/gis/temperature_zone.tif");
-	file parcelles_viti <- file("../includes/gis/parcelles_viti_zone.shp");
-	file parcelles_confu <- file("../includes/gis/parcelles.shp");
+	list<lobesia> lobesias -> {lobesia where not dead(each)};
+	//file temperature_raster <- file("../includes/gis/temperature_zone.tif");
+	file parcelles_viti <- file("../includes/gis/parcelles_viti_zone2.shp");
+	file parcelles_confu <- file("../includes/gis/parcelles2.shp");
 	file tempFile <- file("../includes/temperature_banyuls/rimbau2012_delta.csv");
 	file timeFile <- csv_file("../includes/temperature_banyuls/date2012.csv", " ",string);
 	list<float> TempData;
@@ -20,7 +21,7 @@ global {
 	date starting_date <- date([2012,3]);
 	//be careful, when real dates are used, modelers should not use the #month and #year values that are not consistent with them
 	float step <- 1 #day; 
-	float toDay ;//<- (date('2012-03-09') to date('2012-08-30')) every (#day); 
+	string toDay ;//<- (date('2012-03-09') to date('2012-08-30')) every (#day); 
 	geometry shape <- envelope(parcelles_viti);
 	int beginPlantDev <- 100;
 	bool climatChange <- false;
@@ -43,7 +44,7 @@ global {
 	float setupDistTrap <- 10.0 * coeff_dist;
 	float radius_trap <- 10.0 * coeff_dist;
 	float distEffectiveTrap <- 15.0 * coeff_dist;
-	int nblobesias <- 50;
+	int nblobesias <- 200;
 	float radius_hotSpots <- 9.0;
 	int nbcomptage;
 	int fisrtComptage;
@@ -53,14 +54,15 @@ global {
 	float coeff_diff_trap <- 0.6;
 	list<cell> active_cells;
 	bool confusion <- true;
-	int rational_traps <- 4 min: 0 max: 4;
+	int rational_traps <- 0 min: 0 max: 4;
 	int nb_traps <- 0;
 	int nbClandestin <- 5;
 	
 	map<string,list> generation_dist;
 	init {
 		ask cell{
-			temperature_here <-max([0, first(temp_cell overlapping location).grid_value - 2.504503]) ;
+			temperature_here <- 14.0 - rnd(1.0)  - 2.504503;
+			//temperature_here <-max([0, first(temp_cell overlapping location).grid_value - 2.504503]) ;
 		} 
 		active_cells <- cell where (each.temperature_here >= 0.0);
 		create parcelle from: parcelles_viti {
@@ -101,6 +103,14 @@ global {
        	}
        	do update_stat;
 	}
+	
+	user_command "creation d'un piege" {
+		create trap with:[location::#user_location];
+		ask active_cells {outOftrapsInfluence <- false;}
+		ask active_cells where empty(trap overlapping (each.location buffer distEffectiveTrap)) {
+       		outOftrapsInfluence <- true;
+       	}
+	}
 	//=====================================================================================
 	// we left the init part
 	//=====================================================================================
@@ -125,21 +135,21 @@ global {
 	action update_stat {
 		generation_dist["legend"] <- [];
 		generation_dist["values"] <- [];
-		loop g over: remove_duplicates(lobesia collect each.generation)
+		loop g over: remove_duplicates(lobesias collect each.generation)
 		{
 			generation_dist["legend"] << string(g);
-			generation_dist["values"] << lobesia count (each.generation = g);
+			generation_dist["values"] << lobesias count (each.generation = g);
 		}  	
 	}
 	
 	action integreted_lutte {
 		 if confusion {
-		 	if not empty(trap where not each.observer) {
+		 	//if not empty(trap where not each.observer) {
 		 		do install_trapping;
 		 		ask active_cells where not empty(trap overlapping (each.location buffer distEffectiveTrap)) {
        				outOftrapsInfluence <- false;
   	 			} 
-		 	}     
+		 	//}     
 		 }
        }
 	
@@ -263,19 +273,21 @@ global {
 	}
 	
 	action temperatureEvolution {
+		if (empty(TempData)) {do pause;}
 		float deltaDay <- first(TempData);
 		TempData >> deltaDay;
   		ask cell {
   			temperature_here <- temperature_here + deltaDay + (climatChange ? 0.5 : 0.0);
   		}
-    	toDay <- first(TempData);
-    	write current_date;
-		TempData >> toDay;
+    	toDay <- first(timeData);
+    	timeData >> toDay;
+    	list<string> v <- toDay split_with "-";
+    	toDay <- v[2]+ "-"+v[1];
 	}
 }
 
 
-grid temp_cell file: temperature_raster frequency: 0;
+//grid temp_cell file: temperature_raster frequency: 0;
 
 grid cell width: 250 height: 159 neighbors: 8 frequency: 0{
 	float termicalAcum <- 0.0;
@@ -300,6 +312,9 @@ grid cell width: 250 height: 159 neighbors: 8 frequency: 0{
 		if flower {
 			draw pyramid(3) color: #red;
 		}
+		else if (mixed_pheromone > 0.2) {
+			draw shape color: color depth: 0.2 border: #black;
+		}
 	}
 	action maj_temp {
 		termicalAcum <- termicalAcum + temperature_here;
@@ -319,7 +334,7 @@ grid cell width: 250 height: 159 neighbors: 8 frequency: 0{
 	  }
 	   	
    	action color_patches {
-   		int val <- round(mixed_pheromone * 3 );
+   		int val <- round(mixed_pheromone * 10 );
    		color <- rgb(0,0,val);
    	}
 }
@@ -327,7 +342,10 @@ grid cell width: 250 height: 159 neighbors: 8 frequency: 0{
 species parcelle frequency: 0{
 	list<cell> cells;
 	aspect default {
-		draw shape color: #gray border: #black;
+		draw shape color: #gray border: #black depth: 0.1;
+	}
+	aspect contours {
+		draw shape.contour color: #red depth:10;
 	}
 }
 
@@ -340,7 +358,7 @@ species parcelle_conf frequency: 0{
 
 species seeds {
 	init {
-		create trap with:[location::location];
+		//create trap with:[location::location];
 		list<cell> cells_neighbors <- cell at_distance  radius_hotSpots;
 		create lobesia number: nblobesias with:[location :: any_location_in(one_of(cells_neighbors))] {
 			do difference_Lobesias;	
@@ -357,7 +375,7 @@ species trap frequency: 0{
 	bool observer <- false;
 	int lobesias_traps;
 	aspect default {
-		draw triangle(2) color: #red border: #black;
+		draw pyramid(3) color: #red border: #black;
 	}
 }
 
@@ -380,7 +398,13 @@ species lobesia skills: [moving] frequency: 0{
     float nb_mating;
     
     aspect default {
-    	draw cube(2) color: color border: #black;
+    	if (phaseNumber >= 4) {
+    		draw file("../images/bug-1.gif") size: 5 at: location + {0,0,1} ;
+			//draw obj_file("../images/Insect.obj", -90::{1,0,0}) color: color size: 1 at: location + {0,0,1} ;
+    	}
+    	else {
+    		draw sphere(0.5) color: color;
+    	} 
     }
     action difference_Lobesias {
     	float normalDist <- gauss(50, 47.5 / 2);
@@ -531,58 +555,60 @@ species lobesia skills: [moving] frequency: 0{
 
 experiment main type: gui {
 	//Parameter agents behaviors
-	parameter "Number of L. botrana" var:nblobesias <- 60 min: 10 max: 1000;
+	parameter "Number of L. botrana" var:nblobesias  min: 10 max: 1000;
 	parameter "Dis. Vision" var:visibility_other <- 1.0 min: 1.0 max: 5.0;
 	parameter "rotation" var:rotation <- 170 min: 20 max: 180;
 	parameter "Adult age of die" var:ageOfDie <- 16 min: 5 max: 20;
 	parameter "Num. of egg laid" var:nb_egg <- 10 min: 5 max: 40;
 	//Parameter trap 
-	parameter "Senarii" var:rational_traps <- 1 min: 0 max: 4;
+	parameter "Senarii" var:rational_traps min: 0 max: 4;
 	parameter "Confusion" var:confusion <- true;
 	parameter "Init. Disp" var:radius_hotSpots <- 8.0 min: 5.0 max: 20.0;
 	
 	
 	output {
-		display carte type: opengl{
-			grid cell lines: #black;
-			species cell;
-			species parcelle transparency: 0.5 ;
-			species trap refresh: false;
+		display carte type: opengl {
+			image "../images/background.png" refresh: false;
+			//grid cell lines: #black transparency: 0.0;
+			species cell transparency: 0.5;
+			species parcelle transparency: 0.5 refresh: false;
+			species parcelle aspect: contours refresh: false;
+			species trap ;
 			species lobesia;
 		}
 		
 		display charts {
-			chart "pop lobesias" type: series size: {0.5,0.5}{
+			chart "pop lobesias" type: series size: {0.5,0.5} x_serie_labels: toDay{
 				data "nb of lobesias" color: #gray value: length(lobesia);
-				data "nb of eggs" color: #red value: lobesia count (each.phaseNumber = 1);
-				data "nb of larva" color: #orange value: lobesia count (each.phaseNumber = 2);
-				data "nb of crisalide" color: #brown value: lobesia count (each.phaseNumber = 3);
-				data "nb of adults" color: #yellow value: lobesia count (each.phaseNumber = 4);
+				data "nb of eggs" color: #red value: lobesias count (each.phaseNumber = 1);
+				data "nb of larva" color: #orange value: lobesias count (each.phaseNumber = 2);
+				data "nb of crisalide" color: #brown value: lobesias count (each.phaseNumber = 3);
+				data "nb of adults" color: #yellow value: lobesias count (each.phaseNumber = 4);
 			}
 			chart "phase evolution" type: histogram size: {0.5,0.5} position: {0.5,0.0}{
-				data "nb of eggs" color: #red value: lobesia count (each.phaseNumber = 1);
-				data "nb of larva" color: #orange value: lobesia count (each.phaseNumber = 2);
-				data "nb of crisalide" color: #brown value: lobesia count (each.phaseNumber = 3);
-				data "nb of adults" color: #yellow value: lobesia count (each.phaseNumber = 4);
+				data "nb of eggs" color: #red value: lobesias count (each.phaseNumber = 1);
+				data "nb of larva" color: #orange value: lobesias count (each.phaseNumber = 2);
+				data "nb of crisalide" color: #brown value: lobesias count (each.phaseNumber = 3);
+				data "nb of adults" color: #yellow value: lobesias count (each.phaseNumber = 4);
 			}
 			chart "generation histogram" type: histogram size: {0.5,0.5} position: {0.0,0.5}{
 				datalist list(generation_dist at "legend") value: list(generation_dist at "values");
 			}
-			chart "male/femelle" type: series size: {0.5,0.5} position: {0.5,0.5}{
-				data "nb of male" color: #blue value: lobesia count (each.sex = 0);
-				data "nb of femelle" color: #violet value: lobesia count (each.sex = 1);
+			chart "male/femelle" type: series size: {0.5,0.5} position: {0.5,0.5} x_serie_labels: toDay{
+				data "nb of male" color: #blue value: lobesias count (each.sex = 0);
+				data "nb of femelle" color: #violet value: lobesias count (each.sex = 1);
 			}
 			
 		}
 		display obs {
-			chart "Temperature" type: series size: {0.5,0.5}{
-				//data "nb of lobesias" color: #gray value: cell mean (each.temperature_here);
+			chart "Temperature" type: series size: {0.5,0.5} x_serie_labels: toDay{
+				data "nb of lobesias" color: #gray value: mean(cell collect (each.temperature_here));
 			}
 			chart "phase evolution" type: histogram size: {0.5,0.5} position: {0.5,0.0}{
-				data "nb of eggs" color: #red value: lobesia count (each.phaseNumber = 1);
-				data "nb of larva" color: #orange value: lobesia count (each.phaseNumber = 2);
-				data "nb of crisalide" color: #brown value: lobesia count (each.phaseNumber = 3);
-				data "nb of adults" color: #yellow value: lobesia count (each.phaseNumber = 4);
+				data "nb of eggs" color: #red value: lobesias count (each.phaseNumber = 1);
+				data "nb of larva" color: #orange value: lobesias count (each.phaseNumber = 2);
+				data "nb of crisalide" color: #brown value: lobesias count (each.phaseNumber = 3);
+				data "nb of adults" color: #yellow value: lobesias count (each.phaseNumber = 4);
 			}
 		
 		}
