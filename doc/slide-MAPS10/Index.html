@@ -1,0 +1,589 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>reveal.js – The HTML Presentation Framework</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/night.css" id="theme">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>Les SMA pour modéliser les pratiques viticoles avec la plateforme GAMA</h2>
+					<p>
+						<small>Par <a href="">Etienne Delay</a> et <a href="">Patrick Taillandier</a></br>
+						MAPS-10 -- 22 juin 2017 -- Olérons</small>
+					</p>
+				</section>
+				<!-- Thèse de doctorat d'Etienne Delay -->
+				<section>
+					<section>
+						<h2>Flash-back</h2>
+						<img width="400px" height="250px" data-src="img/flashback.jpg" alt="flashback">
+					</section>
+					<section>
+						<h2>Définitions des problématiques et des terrains d'études</h2>
+					</section>
+					<section>
+						<h3>Le contexte général</h3>
+						<ol>
+							<li>La viticulture de montagne et de fortes pentes ne fait pas l'objet d'études spécifiques</li>
+							<li>La tendance est à l'abandon des pentes au profit d'une viticulture mécanisée en plaine</li>
+						</ol>
+						<p>Réfléchir et explorer les influences des spécificitées liées à la pente dans les pratiques socio-spatiales viticoles</p>
+						<aside class="notes">
+							<ol>
+								<li>La viticulture de montagne et de fortes pentes ne fait pas l'objet d'études spécifiques. Elle est par contre souvant intégrée dans des réflexions viticoles au sens large</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h3>Les spécificités de la viticulture de pentes</h3>
+						<ul>
+							<li>Des terrains souvent pauvres, rapidement reconnus comme qualitatifs</li>
+							<li>Des conditions de travail difficiles, qui interdisent la mécanisation</li>
+							<li>Un accès aux parcelles complexes et des distances temps accentuées par la pente</li>
+							<li>Une structuration sociale particulière qui fait la part belle aux petits exploitants et au système coopératif</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Les problématiques</h3>
+						<p>Explorer les interactions <strong>société &hArr; environnement</strong> pour proposer une lecture et une compréhension renouvellées du fonctionnement de la viticulture de pente</p>
+						<img data-src="./img/banyuls_workers.JPG" alt="travail banyuls mains" height="200">
+						<aside class="notes">
+							<p align="left">3 questionnements :</p>
+							<ol>
+								<li>La place de l’économie et du marché dans les dynamiques territoriales de vignoble-système ?</li>
+								<li>Les interactions sociales et spatiales structurent leur espace ?</li>
+								<li>Comment les acteurs s’approprient les phénomènes formalisés pour penser l’abstraction ?</li>
+							</ol>
+						</aside>
+					</section>
+					<section>
+						<h3>Les terrains d'études : localisation</h3>
+						<img width="70%" data-src="./img/localisation_terrains_etudes.png" alt="carte de localisation">
+					</section>
+					<section>
+						<h3>Les terrains d'études : description</h3>
+						<img width="1000" data-src="./img/pano-banyuls.jpg" alt="panorama val di Cembra">
+						<p style="text-align:center;">Banyuls-sur-mer</p>
+						<img width="1000" data-src="./img/cembra2-s.jpg" alt="panorama val di Cembra">
+						<p style="text-align:center;">La <i>val di Cembra</i></p>
+						<aside class="notes">
+							<ul>
+								<li>Un vignoble en contexte de pente</li>
+								<li>Quatre communes</li>
+								<li>Viticulture jardinée (Briffaud et Davasse, 2012)</li>
+								<li>Accès au tourisme</li>
+								<li>Une forte présente de la coopération sous toutes ses formes</li>
+							</ul>
+						</aside>
+					</section>
+					<section>
+						<h3>Overview</h3>
+						<img width="600" data-src="./img/positionnement_modeles_echelles.png" alt="panorama val di Cembra">
+					</section>
+				</section>
+				<!-- Le problème Lobesia -->
+				<section>
+					<section>
+						<h2><i>Lobesias botrana</i> et la viticultures</h2>
+					</section>
+					<section>
+						<h3>La viticulture dans le monde</h3>
+						<img width="700px" height="400px" data-src="img/surfaces_viti_mondiale.png" alt="map viticulture world">
+						<p><i>L. bortrana</i> est considérées comme le principal ravageurs de la vigne cultivée depuis la crise du phylloxera (Roehrich et al. 2000)</p>
+					</section>
+					<section>
+						<h3><i>Lobesias botrana</i> ?</h3>
+						<img width="300px" height="300px" data-src="img/eudemis-adulte.png" alt="Who is lobesia">
+						<ol>
+							<li><i>L. bortrana</i> ravageur polyphage (Tasin et al. 2006),</li>
+							<li>la femelle libère des phéromones (Briand 2009)</li>
+							<li>C'est une espèce thermo-sensible</li>
+						</ol>
+						<aside class="notes">
+							<ol>
+								<li>Provoque des dégat sur les jeunes pouse et sur les fruits : maladies cryptogamiques (oïdium, mildiou, etc)</li>
+								<li> un certain nombre de travaux propose des modèles mathématiques permettant
+	de « prédire » les dates des vols d’adultes (Bovey 1966 ; J. A. Logan et al. 1976).</li>
+							</ol>
+						</aside>
+
+					</section>
+					<section>
+						<h3>Où</h3>
+						<img width="500px" height="400px" data-src="img/localisation_banyuls.png" alt="Map Banyuls">
+						<p>L'AOC Banyuls - Collioure</p>
+					</section>
+					<section>
+						<h3>Comment</h3>
+						<img width="400px" height="350px" data-src="img/ThDelay.jpg" alt="Map Banyuls">
+						<ul>
+							<li>Depuis 1999, un suivi de l’infestation sur des parcelles témoins (GDA)</li>
+							<li>Depuis 2012, 11 capteurs de température effectuant des relevés toutes les 10 minutes (TERVICLIM)</li>
+						</ul>
+					</section>
+					<section>
+						<h3>Comment</h3>
+						<img width="600px" height="550px" data-src="img/comptage_lobesia_2011_2013.png" alt="Map Banyuls">
+						<p>3 années de comptage dane une parcelle témoin</p>
+					</section>
+					<section>
+						<h2>Les questions</h2>
+							<ul>
+								<li>La confusion sexuelle a-t-elle un impact sur les populations d’eudémis simulées ?</li>
+								<li>L’espace est-il un facteur influençant la dynamique de population
+								du parasite ?</li>
+								<li>Quelles sont les stratégies de lutte intégrée optimale pour lutter
+								contre ce microlépidoptère ?</li>
+								<li>Quelles sont les conséquences d’un passager clandestin dans la lutte
+								intégrée ?</li>
+							<ul>
+					</section>
+				</section>
+
+				<!-- Une implementation en Netlogo et maintenant GAMA -->
+				<section>
+					<section>
+						<h2>Un modèle, deux implementations</h2>
+					</section>
+					<section>
+						<h3>Implémentation avec Netlogo</h3>
+						<img width="700px" height="550px" data-src="img/netlogo_cell.png" alt="Netlogo Cell">
+					</section>
+					<section>
+						<h3>Un modèle complexe</h3>
+						<p align="left">Les +</p>
+						<ul>
+							<li>Large communauté, très réactive (#stackoverflow)</li>
+							<li>Primitive simple</li>
+						</ul>
+						<p align="left">Mais des limites...</p>
+						<ul>
+							<li>Passage à l’échelle (~ 300 000 agents)</li>
+							<li>Interface "figée" (une seule fenêtre d’affichage)</li>
+							<li>Environnement spatial « contraint »
+								<ol>
+									<li>une seule grille</li>
+									<li> pas de géométries pour les agents</li>
+								</ol>
+						</ul>
+					</section>
+					<section>
+						<h3>Gama - skyrocket</h3>
+						<img width="300px" height="300px" data-src="img/gama_logo.png" alt="logo gama">
+						<ol>
+							<li>Puissant</li>
+							<li>SIG facile à importer</li>
+							<li><i>versatile</i> = addaptable (multi-interface c.f. LittoSim)</li>
+							<li>architecture modulaire (java)</li>
+						</ol>
+					</section>
+					<section>
+						<h3>Un environnement intégré</h3>
+						<video preload="auto" controls="controls" src="video_webm/01-ide-main.webm" height="500"></video>
+					</section>
+					<section>
+						<h3>Coupler modélisation et simulation </h3>
+						<video preload="auto" controls="controls" src="video_webm/02-gui_main.webm" height="500"></video>
+					</section>
+					<section>
+						<h3>Différentes topologies</h3>
+						<video preload="auto" controls="controls" src="video_webm/03-multiple_environnement.webm" height="500"></video>
+					</section>
+					<section>
+						<h3>Intégration de données spatiales</h3>
+						<video preload="auto" controls="controls" src="video_webm/04-Seamless_GIS.webm" height="500"></video>
+					</section>
+					<section>
+						<h3>Modèles multi-niveaux</h3>
+						<video preload="auto" controls="controls" src="video_webm/05-multi-level-agent-based-modeling.webm" height="500"></video>
+					</section>
+					<section>
+						<h3>Différents formalismes</h3>
+						<video preload="auto" controls="controls" src="video_webm/06-mathematical_main.webm" height="500"></video>
+						<p>Reflexes, équations différentielles, machine à états finis, architecture cognitive (BDI)</p>
+					</section>
+					<section>
+						<h3>Nombreux outils de visualisation</h3>
+						<video preload="auto" controls="controls" src="video_webm/07-Advanced_viz.webm" height="500"></video>
+						<p>Affichage 3D (avec textures, lumières et cameras), par couche, nombreux types de graphiques (séries, histogramme, radar, heatmap…)</p>
+					</section>
+					<section>
+						<h3>Des outils dédiés à la définition de jeux sérieux</h3>
+						<img width="600px" height="400px" data-src="img/gama_particip.png" alt="Gama participatif">
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Le Model CeLL dans GAMA?</h2>
+						<p>C'est possibles ?</p>
+					</section>
+					<section>
+						<h3>Le Model CeLL dans GAMA</h3>
+						<img width="600px" height="400px" data-src="img/gama_lobesia.png" alt="Gama participatif">
+					</section>
+					<section>
+						<h3>Le Model CeLL dans GAMA en video</h3>
+						<video preload="auto" controls="controls" src="video_webm/Screencast_21-06-2017_22:06:32.webm" height="500"></video>
+					</section>
+				</section>
+				<section>
+					<section>
+						<h2>Quelques résultats</h2>
+					</section>
+					<section>
+						<h3></h3>
+						<img width="600px" height="400px" data-src="img/echantillon.png" alt="Gama participatif">
+						<p>moyenne de 10 sample sur 10 (a), 20 (b), 30 (c) replication</p>
+					</section>
+				</section>
+				<section>
+					<h2>Slides</h2>
+					<p>
+						Not a coder? Not a problem. There's a fully-featured visual editor for authoring these, try it out at <a href="http://slides.com" target="_blank">http://slides.com</a>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Point of View</h2>
+					<p>
+						Press <strong>ESC</strong> to enter the slide overview.
+					</p>
+					<p>
+						Hold down alt and click on any element to zoom in on it using <a href="http://lab.hakim.se/zoom-js">zoom.js</a>. Alt + click anywhere to zoom back out.
+					</p>
+				</section>
+
+				<section>
+					<h2>Touch Optimized</h2>
+					<p>
+						Presentations look great on touch devices, like mobile phones and tablets. Simply swipe through your slides.
+					</p>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+						## Markdown support
+
+						Write content using inline or external Markdown.
+						Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+
+						```
+						<section data-markdown>
+						  ## Markdown support
+
+						  Write content using inline or external Markdown.
+						  Instructions and more info available in the [readme](https://github.com/hakimel/reveal.js#markdown).
+						</section>
+						```
+					</script>
+				</section>
+
+				<section>
+					<section id="fragments">
+						<h2>Fragments</h2>
+						<p>Hit the next arrow...</p>
+						<p class="fragment">... to step through ...</p>
+						<p><span class="fragment">... a</span> <span class="fragment">fragmented</span> <span class="fragment">slide.</span></p>
+
+						<aside class="notes">
+							This slide has fragments which are also stepped through in the notes window.
+						</aside>
+					</section>
+					<section>
+						<h2>Fragment Styles</h2>
+						<p>There's different types of fragments, like:</p>
+						<p class="fragment grow">grow</p>
+						<p class="fragment shrink">shrink</p>
+						<p class="fragment fade-out">fade-out</p>
+						<p class="fragment fade-up">fade-up (also down, left and right!)</p>
+						<p class="fragment current-visible">current-visible</p>
+						<p>Highlight <span class="fragment highlight-red">red</span> <span class="fragment highlight-blue">blue</span> <span class="fragment highlight-green">green</span></p>
+					</section>
+				</section>
+
+				<section id="transitions">
+					<h2>Transition Styles</h2>
+					<p>
+						You can select from different transitions, like: <br>
+						<a href="?transition=none#/transitions">None</a> -
+						<a href="?transition=fade#/transitions">Fade</a> -
+						<a href="?transition=slide#/transitions">Slide</a> -
+						<a href="?transition=convex#/transitions">Convex</a> -
+						<a href="?transition=concave#/transitions">Concave</a> -
+						<a href="?transition=zoom#/transitions">Zoom</a>
+					</p>
+				</section>
+
+				<section id="themes">
+					<h2>Themes</h2>
+					<p>
+						reveal.js comes with a few themes built in: <br>
+						<!-- Hacks to swap themes after the page has loaded. Not flexible and only intended for the reveal.js demo deck. -->
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/black.css'); return false;">Black (default)</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/white.css'); return false;">White</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/league.css'); return false;">League</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/sky.css'); return false;">Sky</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/beige.css'); return false;">Beige</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/simple.css'); return false;">Simple</a> <br>
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/serif.css'); return false;">Serif</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/blood.css'); return false;">Blood</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/night.css'); return false;">Night</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/moon.css'); return false;">Moon</a> -
+						<a href="#" onclick="document.getElementById('theme').setAttribute('href','css/theme/solarized.css'); return false;">Solarized</a>
+					</p>
+				</section>
+
+				<section>
+					<section data-background="#dddddd">
+						<h2>Slide Backgrounds</h2>
+						<p>
+							Set <code>data-background="#dddddd"</code> on a slide to change the background color. All CSS color formats are supported.
+						</p>
+						<a href="#" class="navigate-down">
+							<img width="178" height="238" data-src="https://s3.amazonaws.com/hakim-static/reveal-js/arrow.png" alt="Down arrow">
+						</a>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png">
+						<h2>Image Backgrounds</h2>
+						<pre><code class="hljs">&lt;section data-background="image.png"&gt;</code></pre>
+					</section>
+					<section data-background="https://s3.amazonaws.com/hakim-static/reveal-js/image-placeholder.png" data-background-repeat="repeat" data-background-size="100px">
+						<h2>Tiled Backgrounds</h2>
+						<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background="image.png" data-background-repeat="repeat" data-background-size="100px"&gt;</code></pre>
+					</section>
+					<section data-background-video="https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.mp4,https://s3.amazonaws.com/static.slid.es/site/homepage/v1/homepage-video-editor.webm" data-background-color="#000000">
+						<div style="background-color: rgba(0, 0, 0, 0.9); color: #fff; padding: 20px;">
+							<h2>Video Backgrounds</h2>
+							<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-video="video.mp4,video.webm"&gt;</code></pre>
+						</div>
+					</section>
+					<section data-background="http://i.giphy.com/90F8aUepslB84.gif">
+						<h2>... and GIFs!</h2>
+					</section>
+				</section>
+
+				<section data-transition="slide" data-background="#4d7e65" data-background-transition="zoom">
+					<h2>Background Transitions</h2>
+					<p>
+						Different background transitions are available via the backgroundTransition option. This one's called "zoom".
+					</p>
+					<pre><code class="hljs">Reveal.configure({ backgroundTransition: 'zoom' })</code></pre>
+				</section>
+
+				<section data-transition="slide" data-background="#b5533c" data-background-transition="zoom">
+					<h2>Background Transitions</h2>
+					<p>
+						You can override background transitions per-slide.
+					</p>
+					<pre><code class="hljs" style="word-wrap: break-word;">&lt;section data-background-transition="zoom"&gt;</code></pre>
+				</section>
+
+				<section>
+					<h2>Pretty Code</h2>
+					<pre><code class="hljs" data-trim contenteditable>
+function linkify( selector ) {
+
+					</code></pre>
+					<p>Code syntax highlighting courtesy of <a href="http://softwaremaniacs.org/soft/highlight/en/description/">highlight.js</a>.</p>
+				</section>
+
+				<section>
+					<h2>Marvelous List</h2>
+					<ul>
+						<li>No order here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+						<li>Or here</li>
+					</ul>
+				</section>
+
+				<section>
+					<h2>Fantastic Ordered List</h2>
+					<ol>
+						<li>One is smaller than...</li>
+						<li>Two is smaller than...</li>
+						<li>Three!</li>
+					</ol>
+				</section>
+
+				<section>
+					<h2>Tabular Tables</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Item</th>
+								<th>Value</th>
+								<th>Quantity</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>Apples</td>
+								<td>$1</td>
+								<td>7</td>
+							</tr>
+							<tr>
+								<td>Lemonade</td>
+								<td>$2</td>
+								<td>18</td>
+							</tr>
+							<tr>
+								<td>Bread</td>
+								<td>$3</td>
+								<td>2</td>
+							</tr>
+						</tbody>
+					</table>
+				</section>
+
+				<section>
+					<h2>Clever Quotes</h2>
+					<p>
+						These guys come in two forms, inline: <q cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;The nice thing about standards is that there are so many to choose from&rdquo;</q> and block:
+					</p>
+					<blockquote cite="http://searchservervirtualization.techtarget.com/definition/Our-Favorite-Technology-Quotations">
+						&ldquo;For years there has been a theory that millions of monkeys typing at random on millions of typewriters would
+						reproduce the entire works of Shakespeare. The Internet has proven this theory to be untrue.&rdquo;
+					</blockquote>
+				</section>
+
+				<section>
+					<h2>Intergalactic Interconnections</h2>
+					<p>
+						You can link between slides internally,
+						<a href="#/2/3">like this</a>.
+					</p>
+				</section>
+
+				<section>
+					<h2>Speaker View</h2>
+					<p>There's a <a href="https://github.com/hakimel/reveal.js#speaker-notes">speaker view</a>. It includes a timer, preview of the upcoming slide as well as your speaker notes.</p>
+					<p>Press the <em>S</em> key to try it out.</p>
+
+					<aside class="notes">
+						Oh hey, these are some notes. They'll be hidden in your presentation, but you can see them if you open the speaker notes window (hit 's' on your keyboard).
+					</aside>
+				</section>
+
+				<section>
+					<h2>Export to PDF</h2>
+					<p>Presentations can be <a href="https://github.com/hakimel/reveal.js#pdf-export">exported to PDF</a>, here's an example:</p>
+					<iframe data-src="https://www.slideshare.net/slideshow/embed_code/42840540" width="445" height="355" frameborder="0" marginwidth="0" marginheight="0" scrolling="no" style="border:3px solid #666; margin-bottom:5px; max-width: 100%;" allowfullscreen> </iframe>
+				</section>
+
+				<section>
+					<h2>Global State</h2>
+					<p>
+						Set <code>data-state="something"</code> on a slide and <code>"something"</code>
+						will be added as a class to the document element when the slide is open. This lets you
+						apply broader style changes, like switching the page background.
+					</p>
+				</section>
+
+				<section data-state="customevent">
+					<h2>State Events</h2>
+					<p>
+						Additionally custom events can be triggered on a per slide basis by binding to the <code>data-state</code> name.
+					</p>
+					<pre><code class="javascript" data-trim contenteditable style="font-size: 18px;">
+Reveal.addEventListener( 'customevent', function() {
+	console.log( '"customevent" has fired' );
+} );
+					</code></pre>
+				</section>
+
+				<section>
+					<h2>Take a Moment</h2>
+					<p>
+						Press B or . on your keyboard to pause the presentation. This is helpful when you're on stage and want to take distracting slides off the screen.
+					</p>
+				</section>
+
+				<section>
+					<h2>Much more</h2>
+					<ul>
+						<li>Right-to-left support</li>
+						<li><a href="https://github.com/hakimel/reveal.js#api">Extensive JavaScript API</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#auto-sliding">Auto-progression</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#parallax-background">Parallax backgrounds</a></li>
+						<li><a href="https://github.com/hakimel/reveal.js#keyboard-bindings">Custom keyboard bindings</a></li>
+					</ul>
+				</section>
+
+				<section style="text-align: left;">
+					<h1>THE END</h1>
+					<p>
+						- <a href="http://slides.com">Try the online editor</a> <br>
+						- <a href="https://github.com/hakimel/reveal.js">Source code &amp; documentation</a>
+					</p>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// More info https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// More info https://github.com/hakimel/reveal.js#dependencies
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
