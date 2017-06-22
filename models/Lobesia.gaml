@@ -32,7 +32,7 @@ global {
 	float reprod_distance <-  0.5;
 	float trapdistance <- 2.0;
 	float visibility_other <- 3.0;
-	float distMove <- 8.0;
+	float distMove <- 16.0;
 	int nb_egg <- 10;
 	int ageOfDie <- 16;
 	float downPherom <- 2.0;
@@ -613,4 +613,25 @@ experiment main type: gui {
 		
 		}
 	}
+}
+
+experiment Rexperiment type: gui  {
+	//Parameter agents behaviors
+	parameter "Number of L. botrana" var:nblobesias  min: 10 max: 1000;
+	parameter "Dis. Vision" var:visibility_other <- 1.0 min: 1.0 max: 5.0;
+	parameter "rotation" var:rotation <- 170 min: 20 max: 180;
+	parameter "Adult age of die" var:ageOfDie <- 16 min: 5 max: 20;
+	parameter "Num. of egg laid" var:nb_egg <- 10 min: 5 max: 40;
+	//Parameter trap 
+	parameter "Senarii" var:rational_traps min: 0 max: 4;
+	parameter "Confusion" var:confusion <- true;
+	parameter "Init. Disp" var:radius_hotSpots <- 8.0 min: 5.0 max: 20.0;
+	
+	output {
+		monitor "nb_lobesias" value: length(lobesia);
+	}
+	
+	
+	
+	
 }
