@@ -38,11 +38,13 @@ time_init <- Sys.time()
 output <- runexpplan(experimentplan,1)
 time_exp <- Sys.time() - time_init
 
+png(filename = "~/gama_workspace/CeLL/doc/slide-MAPS10/img/gama_exec_time.png")
 with(output[[1]],{
   plot(nb_lobesias,step,type="l",lwd=2,col="red",
        ylab="number of lobesia",xlab="Step",
-       ylim=c(0,70000),xlim=c(70,175), main = paste("ex. time", round(time_exp,digits = 2),"sec",sep = " "))
+       ylim=c(0,98000),xlim=c(70,175), main = paste("ex. time", round(time_exp,digits = 2),"min",sep = " "))
 })
+dev.off()
 # 
 # with(output[[2]],{
 #   plot(step,I,type="l",lwd=2,col="red",
